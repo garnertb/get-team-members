@@ -1,0 +1,42 @@
+---
+name: Get GitHub team members
+description: Retrieve team members from a GitHub team
+inputs:
+  org:
+    description: Name of the org
+    required: true
+    default: ${{ github.repository_owner }}
+  team_slug:
+    description: Slug of the team
+    required: true
+  role:
+    description: 'Role of the member.  Must be one of: member, maintainer, all.'
+    required: false
+    default: all
+  token: 
+    description: GitHub token
+    required: true
+    default: ${{ github.token }}
+outputs:
+  data:
+    description: Raw member data from GitHub API
+    value: ${{ steps.get-members.outputs.data }}
+  members:
+    description: GitHub logins of team members
+    value: ${{ steps.members.outputs.members }}
+runs:
+  using: composite
+  steps:
+    - name: get-team-members
+      id: get-members
+      uses: octokit/request-action@v2.x
+      with:
+        route: GET /orgs/{org}/teams/{team_slug}/members?role={role}
+        org: ${{ inputs.org }}
+        team_slug: ${{ inputs.team_slug }}
+        role: ${{inputs.role}}
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+    - id: members
+      run: echo '::set-output name=members::${{ join(fromJson(steps.get-members.outputs.data).*.login) }}'
+      shell: bash
