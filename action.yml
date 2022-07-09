@@ -1,6 +1,9 @@
 ---
 name: Get GitHub team members
 description: Retrieve team members from a GitHub team
+branding:
+  icon: 'users'  
+  color: 'yellow'
 inputs:
   org:
     description: Name of the org
