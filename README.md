@@ -26,6 +26,10 @@ This action fetches the users of a GitHub team.
     token: ''
 ```
 
+## Permissions
+
+The GitHub [token][token docs] needs to have `read:org` permissions to read organizational team members.
+
 ## Scenerios
 
 ### Fetch handles for all members of a team
@@ -105,3 +109,5 @@ Use this action to set assignees for a new issue with [issue-bot](https://github
     body: |-
       :wave: Hi, {{#each assignees}}@{{this}}{{#unless @last}}, {{/unless}}{{/each}}!
 ```
+
+[token docs]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
