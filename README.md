@@ -21,7 +21,7 @@ This action fetches the users of a GitHub team.
     role: ''
 
     # Personal access token (PAT) used to fetch team members. 
-    #
+    # Note the PAT must be entitled to at least `read:org` scope.
     # Default: ${{ github.token }}
     token: ''
 ```
