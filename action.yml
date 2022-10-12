@@ -32,14 +32,13 @@ runs:
   steps:
     - name: get-team-members
       id: get-members
-      uses: octokit/request-action@v2.x
-      with:
-        route: GET /orgs/{org}/teams/{team_slug}/members?role={role}
-        org: ${{ inputs.org }}
-        team_slug: ${{ inputs.team_slug }}
-        role: ${{inputs.role}}
+      shell: bash
+      run: echo ::set-output name=data::$(gh api --paginate -X GET /orgs/$ORG/teams/$TEAM_SLUG/members\?role=$ROLE\ | jq 'reduce inputs as $i (.; . += $i)')
       env:
-        GITHUB_TOKEN: ${{ inputs.token }}
+        ORG: ${{ inputs.org }}
+        TEAM_SLUG: ${{ inputs.team_slug }}
+        ROLE: ${{ inputs.role }}
+        GH_TOKEN: ${{ inputs.token }}
     - id: members
       run: echo '::set-output name=members::${{ join(fromJson(steps.get-members.outputs.data).*.login) }}'
       shell: bash
