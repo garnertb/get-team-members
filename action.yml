@@ -32,7 +32,7 @@ runs:
   steps:
     - name: get-team-members
       id: get-members
-      runs: gh api --paginate -X GET /orgs/$ORG/teams/$TEAM_SLUG/members\?role=$ROLE\&per_page=1
+      run: gh api --paginate -X GET /orgs/$ORG/teams/$TEAM_SLUG/members\?role=$ROLE\&per_page=1
       env:
         ORG: ${{ inputs.org }}
         TEAM_SLUG: ${{ inputs.team_slug }}
