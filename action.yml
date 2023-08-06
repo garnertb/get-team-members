@@ -33,12 +33,12 @@ runs:
     - name: get-team-members
       id: get-members
       shell: bash
-      run: echo ::set-output name=data::$(gh api --paginate -X GET /orgs/$ORG/teams/$TEAM_SLUG/members\?role=$ROLE | jq 'reduce inputs as $i (.; . += $i)')
+      run: echo data=$(gh api --paginate -X GET /orgs/$ORG/teams/$TEAM_SLUG/members\?role=$ROLE | jq 'reduce inputs as $i (.; . += $i)') >> "$GITHUB_OUTPUT"
       env:
         ORG: ${{ inputs.org }}
         TEAM_SLUG: ${{ inputs.team_slug }}
         ROLE: ${{ inputs.role }}
         GH_TOKEN: ${{ inputs.token }}
     - id: members
-      run: echo '::set-output name=members::${{ join(fromJson(steps.get-members.outputs.data).*.login) }}'
+      run: echo 'members=${{ join(fromJson(steps.get-members.outputs.data).*.login) }}' >> "$GITHUB_OUTPUT"
       shell: bash
